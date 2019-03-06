@@ -2,15 +2,28 @@ import React, { Component } from 'react';
 import {CategoryList} from './style.js';
 
 class Categories extends Component {
+    constructor(){
+        super();
+        this.state = {
+            categories: ['All', 'Javascript', 'Ruby', 'Java', 'CSS', 'Python']
+        }
+    }
+
+    handleClick(category){
+        this.props.changeToCategory(category);
+    }
     render() {
+        const activeItem = this.props.category;
+        console.log(activeItem);
+        
+        const items = this.state.categories.map(item => (
+            <li key={item} 
+                active={ item === activeItem && "true" } 
+                onClick={this.handleClick.bind(this, item)}>{item}</li>
+        ));
         return (
             <CategoryList>
-                <li active="true">All</li>
-                <li>Javascript</li>
-                <li>Ruby</li>
-                <li>Java</li>
-                <li>CSS</li>
-                <li>Python</li>
+                {items}
             </CategoryList>
         );
     }

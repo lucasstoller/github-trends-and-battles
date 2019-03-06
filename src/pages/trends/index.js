@@ -7,7 +7,7 @@ class Trends extends Component {
     constructor(){
         super();
         this.state = {
-            category: 'all',
+            category: 'All',
             trendList: [],
             loading: false
         }
@@ -15,7 +15,7 @@ class Trends extends Component {
 
     changeToCategory(category){
         let url = '';
-        if (category === 'all') {
+        if (category === 'All') {
             url = "https://api.github.com/search/repositories?q=stars:>0+fork:true&sort=stars&order=desc"
         } else {
             url = `https://api.github.com/search/repositories?q=language:${category}+fork:true&sort=stars&order=desc`
@@ -27,7 +27,7 @@ class Trends extends Component {
             })
             .then(data => {
                 const trendList = data.items;                
-                this.setState({trendList});
+                this.setState({trendList, category});
             })
             .finally(() => {
                 this.setState({loading: false});
@@ -35,14 +35,13 @@ class Trends extends Component {
     }
 
     componentDidMount(){
-        this.changeToCategory('all');
+        this.changeToCategory('All');
     }
 
     render() {
-
         return (
             <div className="Trends">
-                <Categories />
+                <Categories category={this.state.category} changeToCategory={this.changeToCategory.bind(this)}/>
                 { this.state.loading ?
                     <Loading>
                         <img 

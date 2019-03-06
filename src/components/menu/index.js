@@ -6,7 +6,7 @@ class Menu extends Component {
         return (
             <Navbar>
                 <li active="true">Trends</li>
-                <li>Battle</li>
+                <li>Battle (soon)</li>
             </Navbar>
         );
     }
