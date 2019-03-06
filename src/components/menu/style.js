@@ -6,12 +6,12 @@ export const Navbar = styled.ul`
 
     li {
         margin-left: 25px;
+        font-weight:bold;
         cursor: pointer;
     }
 
     li[active] {
         color: #bb2e1f;
-        font-weight:bold;
     }
 `;
 

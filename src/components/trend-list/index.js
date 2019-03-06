@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
 import ProjectStats from '../project-stats';
-import { Project } from './style.js';
+import { Project, ProjectList } from './style.js';
 
 class TrendList extends Component {
     render() {
         const { trendList } = this.props;
-        const list = trendList.map(item => (
+        const list = trendList.map((item, index) => (
             <Project key={item.id}>
-                <div className="rank">#{item.id}</div>
-                <div className="project-image"></div>
-                <div className="project-name">{item.repo_name}</div>
-                <div className="user-name">{item.user_name}</div>
+                <div className="rank">#{index + 1}</div>
+                <img className="avatar" src={item.owner.avatar_url} alt={`Avatar for ${item.name}`} />
+                <a href={item.html_url} className="name">{item.name}</a>
+                <div className="description">{item.description}</div>
+                <a href={item.owner.html_url} className="user">{item.owner.login}</a>
                 <ProjectStats stats={{
-                    stars: item.stars, 
+                    stars: item.stargazers_count, 
                     forks: item.forks, 
                     openIssues: item.open_issues
                 }}>
@@ -21,9 +22,9 @@ class TrendList extends Component {
         ));
 
         return (
-            <ul className="repository-list">
+            <ProjectList>
                 {list}
-            </ul>
+            </ProjectList>
         );
     }
 }

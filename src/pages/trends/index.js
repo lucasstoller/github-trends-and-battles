@@ -1,22 +1,56 @@
 import React, { Component } from 'react';
-
 import Categories from '../../components/categories';
 import TrendList from '../../components/trend-list';
-
-const trendList = [
-    {id:1, repo_name: "freeCodeCamp", user_name: "freeCodeCamp", stars: 297.840, forks: 21.043, open_issues: 4.008},
-    {id:2, repo_name: "twbs", user_name: "twbs", stars: 297.840, forks: 21.043, open_issues: 4.008},
-    {id:3, repo_name: "vuejs", user_name: "vuejs", stars: 297.840, forks: 21.043, open_issues: 4.008},
-    {id:4, repo_name: "facebook", user_name: "facebook", stars: 297.840, forks: 21.043, open_issues: 4.008},
-    {id:5, repo_name: "tensorflow", user_name: "tensorflow", stars: 297.840, forks: 21.043, open_issues: 4.008}
-]
+import { Loading } from './styles';
 
 class Trends extends Component {
+    constructor(){
+        super();
+        this.state = {
+            category: 'all',
+            trendList: [],
+            loading: false
+        }
+    }
+
+    changeToCategory(category){
+        let url = '';
+        if (category === 'all') {
+            url = "https://api.github.com/search/repositories?q=stars:>0+fork:true&sort=stars&order=desc"
+        } else {
+            url = `https://api.github.com/search/repositories?q=language:${category}+fork:true&sort=stars&order=desc`
+        }
+        this.setState({loading: true});
+        fetch(url)
+            .then(res => {
+                return res.json();
+            })
+            .then(data => {
+                const trendList = data.items;                
+                this.setState({trendList});
+            })
+            .finally(() => {
+                this.setState({loading: false});
+            })
+    }
+
+    componentDidMount(){
+        this.changeToCategory('all');
+    }
+
     render() {
+
         return (
             <div className="Trends">
-                <Categories></Categories>
-                <TrendList trendList={trendList}></TrendList>
+                <Categories />
+                { this.state.loading ?
+                    <Loading>
+                        <img 
+                            src={ require('../../images/pixelart-octocat.gif') }
+                            className="octocat-gif" alt="Octocat gif"/>
+                        <img src={ require('../../images/loading.gif') }
+                            className="loading-gif" alt="Loading..."/>
+                    </Loading>:<TrendList trendList={this.state.trendList} /> }
             </div>
         );
     }
